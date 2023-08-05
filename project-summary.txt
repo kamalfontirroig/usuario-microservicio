@@ -1,0 +1,656 @@
+
+====================
+Project Structure
+====================
+
+.src
+.src.main
+.src.main.java
+.src.main.java.com
+.src.main.java.com.banco
+.src.main.java.com.banco.apiusuarios
+.src.main.java.com.banco.apiusuarios.config
+.src.main.java.com.banco.apiusuarios.controlador
+.src.main.java.com.banco.apiusuarios.dto
+.src.main.java.com.banco.apiusuarios.excepciones
+.src.main.java.com.banco.apiusuarios.mapper
+.src.main.java.com.banco.apiusuarios.modelo
+.src.main.java.com.banco.apiusuarios.repositorio
+.src.main.java.com.banco.apiusuarios.security
+.src.main.java.com.banco.apiusuarios.servicio
+.src.main.java.com.banco.apiusuarios.util
+.src.test
+.src.test.java
+.src.test.java.com
+.src.test.java.com.banco
+.src.test.java.com.banco.apiusuarios
+.src.test.java.com.banco.apiusuarios.controlador
+.src.test.java.com.banco.apiusuarios.excepciones
+.src.test.java.com.banco.apiusuarios.repositorio
+.src.test.java.com.banco.apiusuarios.servicio
+.src.test.java.com.banco.apiusuarios.util
+
+====================
+Application Properties
+====================
+
+File: src\main\resources\application.properties
+
+#RFC 5322 email pattern
+#patron.email=^[\\w!#$%&'*+/=?{|}~^-]+(?:.[\\w!#$%&'*+/=?{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$
+
+#aaaaa1@aaa2.com email pattern
+patron.email=^[a-zA-Z0-9.]+@[a-zA-Z0-9.]+\\.[a-zA-Z]{2,6}$
+#Una Mayuscula, letras minúsculas, y dos numeros
+patron.password=^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d.*\\d).+$
+
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+spring.h2.console.enabled=true
+
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=create-drop
+
+
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql=TRACE
+
+#JWT configuration
+#Secreto
+jwt.secret=ThisIsASecret
+#Expiración en segundos (3600s = 1hr)
+jwt.expiration=900
+
+====================
+Gradle Build File
+====================
+
+File: build.gradle
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.1.2'
+	id 'io.spring.dependency-management' version '1.1.2'
+}
+
+group = 'com.banco'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'org.hibernate.validator:hibernate-validator:7.0.1.Final'
+	implementation 'com.auth0:java-jwt:3.18.2'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api'
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+	testImplementation 'org.mockito:mockito-core'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+====================
+Classes and Interfaces
+====================
+
+
+Class ApiUsuariosApplication
+
+Package: com.banco.apiusuarios
+@SpringBootApplication
+void main(String[])
+
+Imports:
+org.springframework.boot.SpringApplication
+org.springframework.boot.autoconfigure.SpringBootApplication
+
+Class PasswordEconderBeanConfig
+
+Package: com.banco.apiusuarios.config
+@Configuration
+BCryptPasswordEncoder passwordEncoder()
+@Bean
+
+Imports:
+org.springframework.context.annotation.Bean
+org.springframework.context.annotation.Configuration
+org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+
+Class PatronConfig
+
+Package: com.banco.apiusuarios.config
+@Configuration
+@ConfigurationProperties
+@Data
+String email
+String password
+
+Imports:
+lombok.Data
+org.springframework.boot.context.properties.ConfigurationProperties
+org.springframework.context.annotation.Configuration
+
+Class UsuarioControlador
+
+Package: com.banco.apiusuarios.controlador
+@RestController
+@RequestMapping
+UsuarioServicio usuarioServicio
+ResponseEntity<UsuarioResponseDto> crearUsuario(UsuarioCreationDto)
+@PostMapping
+
+Imports:
+com.banco.apiusuarios.dto.UsuarioCreationDto
+com.banco.apiusuarios.dto.UsuarioResponseDto
+com.banco.apiusuarios.modelo.Usuario
+com.banco.apiusuarios.servicio.UsuarioServicio
+jakarta.validation.Valid
+org.springframework.beans.factory.annotation.Autowired
+org.springframework.http.HttpStatus
+org.springframework.http.ResponseEntity
+org.springframework.web.bind.annotation
+
+Class UsuarioCreationDto
+
+Package: com.banco.apiusuarios.dto
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+String email
+String name
+String password
+
+Imports:
+lombok
+
+Class UsuarioResponseDto
+
+Package: com.banco.apiusuarios.dto
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+UUID id
+Date created
+Date modified
+Date lastLogin
+String token
+Boolean isActive
+
+Imports:
+lombok
+java.util.Date
+java.util.UUID
+
+Class DuplicateEmailException
+
+Package: com.banco.apiusuarios.excepciones
+
+Imports:
+
+Class ErrorResponse
+
+Package: com.banco.apiusuarios.excepciones
+@Data
+String mensaje
+
+Imports:
+lombok.Data
+
+Class InvalidEmailFormat
+
+Package: com.banco.apiusuarios.excepciones
+
+Imports:
+
+Class InvalidPasswordFormat
+
+Package: com.banco.apiusuarios.excepciones
+
+Imports:
+
+Class UsuarioControladorExcepciones
+
+Package: com.banco.apiusuarios.excepciones
+@ControllerAdvice
+Logger log
+ResponseEntity<ErrorResponse> manejarExcepcionesDeValidacion(RuntimeException)
+@ExceptionHandler
+ResponseEntity<ErrorResponse> manejarExcepcionDeCorreoExistente(DuplicateEmailException)
+@ExceptionHandler
+
+Imports:
+com.banco.apiusuarios.servicio.UsuarioServicioImpl
+org.slf4j.Logger
+org.slf4j.LoggerFactory
+org.springframework.http.HttpStatus
+org.springframework.http.ResponseEntity
+org.springframework.web.bind.annotation.ControllerAdvice
+org.springframework.web.bind.annotation.ExceptionHandler
+
+Class UsuarioMapper
+
+Package: com.banco.apiusuarios.mapper
+@Component
+Usuario fromUsuarioCreationDto(UsuarioCreationDto)
+UsuarioResponseDto toUsuarioResponseDto(Usuario)
+
+Imports:
+com.banco.apiusuarios.dto.UsuarioCreationDto
+com.banco.apiusuarios.dto.UsuarioResponseDto
+com.banco.apiusuarios.modelo.Usuario
+org.springframework.stereotype.Component
+
+Class Telefono
+
+Package: com.banco.apiusuarios.modelo
+@Data
+@Entity
+@Table
+UUID id
+@Id
+@GeneratedValue
+@Column
+String number
+@Column
+String cityCode
+@Column
+String countryCode
+@Column
+Usuario usuario
+@ManyToOne
+@JoinColumn
+
+Imports:
+jakarta.persistence
+lombok.Data
+java.util.UUID
+
+Class Usuario
+
+Package: com.banco.apiusuarios.modelo
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+@Table
+UUID id
+@Id
+@GeneratedValue
+@Column
+String name
+@NotBlank
+@Column
+String email
+@NotBlank
+@Column
+String password
+@NotBlank
+@Column
+Date created
+@Temporal
+@Column
+Date modified
+@Temporal
+@Column
+Date lastLogin
+@Temporal
+@Column
+String token
+@Column
+Boolean isActive
+@Column
+List<Telefono> phones
+@OneToMany
+void prePersist()
+@PrePersist
+void preUpdate()
+@PreUpdate
+
+Imports:
+jakarta.persistence
+jakarta.validation.constraints.Email
+jakarta.validation.constraints.NotBlank
+jakarta.validation.constraints.Pattern
+lombok.AllArgsConstructor
+lombok.Builder
+lombok.Data
+lombok.NoArgsConstructor
+org.antlr.v4.runtime.misc.NotNull
+java.util.Date
+java.util.List
+java.util.UUID
+
+Interface TelefonoRepositorio
+
+Package: com.banco.apiusuarios.repositorio
+@Repository
+
+Imports:
+com.banco.apiusuarios.modelo.Telefono
+org.springframework.data.jpa.repository.JpaRepository
+org.springframework.stereotype.Repository
+java.util.UUID
+
+Interface UsuarioRepositorio
+
+Package: com.banco.apiusuarios.repositorio
+@Repository
+Usuario findByEmail(String)
+
+Imports:
+com.banco.apiusuarios.modelo.Usuario
+org.springframework.data.jpa.repository.JpaRepository
+org.springframework.stereotype.Repository
+java.util.UUID
+
+Class JwtUtil
+
+Package: com.banco.apiusuarios.security
+@Component
+String SECRET
+int EXPIRATION_TIME
+void setSecret(String)
+@Value
+void setExpiration(Integer)
+@Value
+String createToken(Usuario)
+
+Imports:
+com.auth0.jwt.JWT
+com.auth0.jwt.algorithms.Algorithm
+com.banco.apiusuarios.modelo.Usuario
+org.springframework.beans.factory.annotation.Value
+org.springframework.stereotype.Component
+java.util.Date
+
+Class SecurityConfig
+
+Package: com.banco.apiusuarios.security
+@Configuration
+SecurityFilterChain securityFilterChain(HttpSecurity)
+@Bean
+
+Imports:
+org.springframework.context.annotation.Bean
+org.springframework.context.annotation.Configuration
+org.springframework.http.HttpMethod
+org.springframework.security.config.annotation.web.builders.HttpSecurity
+org.springframework.security.web.SecurityFilterChain
+org.springframework.security.web.util.matcher.AntPathRequestMatcher
+
+Interface UsuarioServicio
+
+Package: com.banco.apiusuarios.servicio
+UsuarioResponseDto crearUsuario(UsuarioCreationDto)
+
+Imports:
+com.banco.apiusuarios.dto.UsuarioCreationDto
+com.banco.apiusuarios.dto.UsuarioResponseDto
+
+Class UsuarioServicioImpl
+
+Package: com.banco.apiusuarios.servicio
+@Service
+UsuarioRepositorio usuarioRepositorio
+UsuarioMapper usuarioMapper
+BCryptPasswordEncoder passwordEncoder
+UsuarioValidator usuarioValidator
+JwtUtil jwtUtil
+Logger log
+UsuarioResponseDto crearUsuario(UsuarioCreationDto)
+@Override
+String encryptPassword(String)
+
+Imports:
+com.banco.apiusuarios.config.PatronConfig
+com.banco.apiusuarios.dto.UsuarioCreationDto
+com.banco.apiusuarios.dto.UsuarioResponseDto
+com.banco.apiusuarios.excepciones.DuplicateEmailException
+com.banco.apiusuarios.mapper.UsuarioMapper
+com.banco.apiusuarios.modelo.Usuario
+com.banco.apiusuarios.repositorio.UsuarioRepositorio
+com.banco.apiusuarios.security.JwtUtil
+com.banco.apiusuarios.util.UsuarioValidator
+org.slf4j.Logger
+org.slf4j.LoggerFactory
+org.springframework.beans.factory.annotation.Autowired
+org.springframework.stereotype.Service
+org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+java.util.regex.Matcher
+java.util.regex.Pattern
+
+Class UsuarioValidator
+
+Package: com.banco.apiusuarios.util
+@Data
+@Component
+PatronConfig patronConfig
+Pattern EMAIL_PATTERN
+Pattern PASSWORD_PATTERN
+Logger log
+boolean validarCreationUsuarioDto(UsuarioCreationDto, Usuario)
+boolean validarCreationUsuarioDto(UsuarioCreationDto)
+
+Imports:
+com.banco.apiusuarios.config.PatronConfig
+com.banco.apiusuarios.dto.UsuarioCreationDto
+com.banco.apiusuarios.excepciones.DuplicateEmailException
+com.banco.apiusuarios.excepciones.InvalidEmailFormat
+com.banco.apiusuarios.excepciones.InvalidPasswordFormat
+com.banco.apiusuarios.modelo.Usuario
+lombok.Data
+org.slf4j.Logger
+org.slf4j.LoggerFactory
+org.springframework.beans.factory.annotation.Autowired
+org.springframework.stereotype.Component
+java.util.regex.Matcher
+java.util.regex.Pattern
+
+Class ProjectSummarizer
+
+Package: [default package]
+void main(String[])
+void printSectionTitle(PrintWriter, String)
+void printPackageStructure(Path, PrintWriter, Set)
+void parseJavaFile(JavaParser, Path, PrintWriter)
+void printFileContent(Path, PrintWriter)
+
+Imports:
+com.github.javaparser.JavaParser
+com.github.javaparser.ast.CompilationUnit
+com.github.javaparser.ast.ImportDeclaration
+com.github.javaparser.ast.body
+java.io.IOException
+java.io.PrintWriter
+java.nio.charset.Charset
+java.nio.file
+java.util.stream.Stream
+java.util.Set
+java.util.HashSet
+
+Class UsuarioControladorTest
+
+Package: com.banco.apiusuarios.controlador
+UsuarioControlador usuarioControlador
+@InjectMocks
+UsuarioServicio usuarioServicio
+@Mock
+void setUp()
+@BeforeEach
+void testCrearUsuario()
+@Test
+
+Imports:
+com.banco.apiusuarios.dto.UsuarioCreationDto
+com.banco.apiusuarios.dto.UsuarioResponseDto
+com.banco.apiusuarios.excepciones.DuplicateEmailException
+com.banco.apiusuarios.servicio.UsuarioServicio
+org.junit.jupiter.api.BeforeEach
+org.junit.jupiter.api.Test
+org.mockito.InjectMocks
+org.mockito.Mock
+org.mockito.MockitoAnnotations
+org.springframework.http.HttpStatus
+org.springframework.http.ResponseEntity
+org.springframework.mock.web.MockHttpServletRequest
+org.springframework.web.context.request.RequestContextHolder
+org.springframework.web.context.request.ServletRequestAttributes
+java.util.UUID
+org.junit.jupiter.api.Assertions.assertEquals
+org.junit.jupiter.api.Assertions.assertThrows
+org.mockito.Mockito.when
+
+Class ControladorDeExcepcionesTest
+
+Package: com.banco.apiusuarios.excepciones
+@ExtendWith
+UsuarioControladorExcepciones controladorDeExcepciones
+@InjectMocks
+void setUp()
+@BeforeEach
+void testManejarExcepcionesDeValidacionEmail()
+@Test
+void testManejarExcepcionesDeValidacionPassword()
+@Test
+void testManejarDuplicateEmailException()
+@Test
+
+Imports:
+org.junit.jupiter.api.BeforeEach
+org.junit.jupiter.api.Test
+org.junit.jupiter.api.extension.ExtendWith
+org.mockito.InjectMocks
+org.mockito.junit.jupiter.MockitoExtension
+org.springframework.http.HttpStatus
+org.springframework.http.ResponseEntity
+org.junit.jupiter.api.Assertions.assertEquals
+
+Class UsuarioRepositorioTest
+
+Package: com.banco.apiusuarios.repositorio
+@DataJpaTest
+TestEntityManager entityManager
+@Autowired
+UsuarioRepositorio usuarioRepositorio
+@Autowired
+void setUp()
+@BeforeEach
+void testFindByEmail()
+@Test
+
+Imports:
+com.banco.apiusuarios.modelo.Usuario
+org.junit.jupiter.api.BeforeEach
+org.junit.jupiter.api.Test
+org.springframework.beans.factory.annotation.Autowired
+org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
+java.util.UUID
+org.junit.jupiter.api.Assertions.assertEquals
+
+Class UsuarioServicioImplTest
+
+Package: com.banco.apiusuarios.servicio
+UsuarioServicioImpl usuarioServicio
+@InjectMocks
+UsuarioRepositorio usuarioRepositorio
+@Mock
+UsuarioMapper usuarioMapper
+@Mock
+BCryptPasswordEncoder passwordEncoder
+@Mock
+UsuarioValidator usuarioValidator
+@Mock
+JwtUtil jwtUtil
+@Mock
+void setUp()
+@BeforeEach
+void testCrearUsuario()
+@Test
+
+Imports:
+com.banco.apiusuarios.config.PatronConfig
+com.banco.apiusuarios.dto.UsuarioCreationDto
+com.banco.apiusuarios.dto.UsuarioResponseDto
+com.banco.apiusuarios.excepciones.DuplicateEmailException
+com.banco.apiusuarios.mapper.UsuarioMapper
+com.banco.apiusuarios.modelo.Usuario
+com.banco.apiusuarios.repositorio.UsuarioRepositorio
+com.banco.apiusuarios.security.JwtUtil
+com.banco.apiusuarios.util.UsuarioValidator
+org.junit.jupiter.api.BeforeEach
+org.junit.jupiter.api.Test
+org.junit.platform.engine.support.hierarchical.ThrowableCollector
+org.mockito.InjectMocks
+org.mockito.Mock
+org.mockito.MockitoAnnotations
+org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+java.util.Date
+java.util.UUID
+org.junit.jupiter.api.Assertions
+org.mockito.ArgumentMatchers
+org.mockito.Mockito.when
+
+Class UsuarioValidatorTest
+
+Package: com.banco.apiusuarios.util
+@SpringBootTest
+UsuarioValidator usuarioValidator
+@Autowired
+void testValidarCreationUsuarioDtoHappyPath()
+@Test
+void testValidarCreationUsuarioDtoInvalidEmail()
+@Test
+void testValidarCreationUsuarioDtoInvalidPassword()
+@Test
+void testCrearUsuarioWithExistingEmail()
+@Test
+
+Imports:
+com.banco.apiusuarios.config.PatronConfig
+com.banco.apiusuarios.dto.UsuarioCreationDto
+com.banco.apiusuarios.excepciones.DuplicateEmailException
+com.banco.apiusuarios.excepciones.InvalidEmailFormat
+com.banco.apiusuarios.excepciones.InvalidPasswordFormat
+com.banco.apiusuarios.modelo.Usuario
+com.banco.apiusuarios.repositorio.UsuarioRepositorio
+org.junit.jupiter.api.BeforeEach
+org.junit.jupiter.api.Test
+org.mockito.Mock
+org.mockito.Mockito
+org.slf4j.Logger
+org.springframework.beans.factory.annotation.Autowired
+org.springframework.boot.test.context.SpringBootTest
+org.springframework.boot.test.mock.mockito.MockBean
+java.util.UUID
+org.junit.jupiter.api.Assertions
+org.mockito.Mockito.when
