@@ -1,25 +1,15 @@
 package com.banco.apiusuarios.util;
 
-import com.banco.apiusuarios.config.PatronConfig;
 import com.banco.apiusuarios.dto.UsuarioCreationDto;
 import com.banco.apiusuarios.excepciones.DuplicateEmailException;
 import com.banco.apiusuarios.excepciones.InvalidEmailFormat;
 import com.banco.apiusuarios.excepciones.InvalidPasswordFormat;
 import com.banco.apiusuarios.modelo.Usuario;
-import com.banco.apiusuarios.repositorio.UsuarioRepositorio;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class UsuarioValidatorTest {

@@ -23,7 +23,7 @@ public class ControladorDeExcepcionesTest {
     @Test
     void testManejarExcepcionesDeValidacionEmail() {
         IllegalArgumentException exception = new IllegalArgumentException("Correo electrónico inválido");
-        ResponseEntity<ErrorResponse> response = controladorDeExcepciones.manejarExcepcionesDeValidacion(exception);
+        ResponseEntity<ErrorResponseMessage> response = controladorDeExcepciones.manejarExcepcionesDeValidacion(exception);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Correo electrónico inválido", response.getBody().getMensaje());
@@ -32,7 +32,7 @@ public class ControladorDeExcepcionesTest {
     @Test
     void testManejarExcepcionesDeValidacionPassword() {
         IllegalArgumentException exception = new IllegalArgumentException("La clave es inválida");
-        ResponseEntity<ErrorResponse> response = controladorDeExcepciones.manejarExcepcionesDeValidacion(exception);
+        ResponseEntity<ErrorResponseMessage> response = controladorDeExcepciones.manejarExcepcionesDeValidacion(exception);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("La clave es inválida", response.getBody().getMensaje());
@@ -41,7 +41,7 @@ public class ControladorDeExcepcionesTest {
     @Test
     void testManejarDuplicateEmailException() {
         DuplicateEmailException exception = new DuplicateEmailException("El correo ya está registrado");
-        ResponseEntity<ErrorResponse> response = controladorDeExcepciones.manejarExcepcionDeCorreoExistente(exception);
+        ResponseEntity<ErrorResponseMessage> response = controladorDeExcepciones.manejarExcepcionDeCorreoExistente(exception);
 
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
         assertEquals("El correo ya está registrado", response.getBody().getMensaje());

@@ -3,12 +3,10 @@ package com.banco.apiusuarios.modelo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +30,7 @@ public class Usuario {
     private String name;
 
     @NotBlank
+    @Email
     @Column(name = "email", unique=true)
     private String email;
 
@@ -57,7 +56,7 @@ public class Usuario {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Telefono> phones;
 
     @PrePersist
@@ -72,6 +71,4 @@ public class Usuario {
     public void preUpdate() {
         modified = new Date();
     }
-
-
 }

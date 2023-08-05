@@ -1,9 +1,7 @@
 package com.banco.apiusuarios.servicio;
 
-import com.banco.apiusuarios.config.PatronConfig;
 import com.banco.apiusuarios.dto.UsuarioCreationDto;
 import com.banco.apiusuarios.dto.UsuarioResponseDto;
-import com.banco.apiusuarios.excepciones.DuplicateEmailException;
 import com.banco.apiusuarios.mapper.UsuarioMapper;
 import com.banco.apiusuarios.modelo.Usuario;
 import com.banco.apiusuarios.repositorio.UsuarioRepositorio;
@@ -11,7 +9,6 @@ import com.banco.apiusuarios.security.JwtUtil;
 import com.banco.apiusuarios.util.UsuarioValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.engine.support.hierarchical.ThrowableCollector;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
