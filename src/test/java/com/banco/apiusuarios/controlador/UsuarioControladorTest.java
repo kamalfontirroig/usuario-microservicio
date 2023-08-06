@@ -38,7 +38,8 @@ public class UsuarioControladorTest {
 
     @Test
     public void testCrearUsuario() {
-        UsuarioCreationDto usuarioCreationDto = new UsuarioCreationDto("test@test.com", "TestUser", "Test1234");
+        UsuarioCreationDto usuarioCreationDto = UsuarioCreationDto.builder().email("test@test.com").name("TestUser").password("Test1234").build();
+
         UsuarioResponseDto usuarioResponseDto = new UsuarioResponseDto(UUID.randomUUID(), null, null, null, null, true);
 
         when(usuarioServicio.crearUsuario(usuarioCreationDto)).thenReturn(usuarioResponseDto);

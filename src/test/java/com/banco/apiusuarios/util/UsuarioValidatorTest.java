@@ -49,7 +49,7 @@ public class UsuarioValidatorTest {
 
     @Test
     public void testCrearUsuarioWithExistingEmail() {
-        UsuarioCreationDto usuarioCreationDto = new UsuarioCreationDto("test@test.com", "test", "test123");
+        UsuarioCreationDto usuarioCreationDto = UsuarioCreationDto.builder().email("test@test.com").name("test").password("test123").build();
         Usuario usuario = Usuario.builder()
                 .email("test@test.com")
                 .name("test")

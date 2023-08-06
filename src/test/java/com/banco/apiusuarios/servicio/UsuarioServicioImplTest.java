@@ -75,7 +75,7 @@ public class UsuarioServicioImplTest {
 
     @Test
     public void testCrearUsuario() {
-        UsuarioCreationDto usuarioCreationDto = new UsuarioCreationDto("test123@test.com", "TestUser", "Test1234");
+        UsuarioCreationDto usuarioCreationDto = UsuarioCreationDto.builder().email("test@test.com").name("TestUser").password("Test1234").build();
         when(usuarioValidator.validarCreationUsuarioDto(any(UsuarioCreationDto.class), eq(null))).thenReturn(true);
         when(usuarioRepositorio.findByEmail(any(String.class))).thenReturn(null);
         UsuarioResponseDto result = usuarioServicio.crearUsuario(usuarioCreationDto);
