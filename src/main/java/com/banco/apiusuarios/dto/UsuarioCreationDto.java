@@ -18,8 +18,8 @@ public class UsuarioCreationDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class TelefonoDto {
-        private String citycode;
-        private String countrycode;
-        private String number;
+        private Integer citycode;
+        private Integer countrycode;
+        private Integer number;
     }
 }

@@ -2,6 +2,7 @@ package com.banco.apiusuarios.modelo;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
 
@@ -17,17 +18,17 @@ public class Telefono {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @NotBlank
+    @NotNull
     @Column(name = "number")
-    private String number;
+    private Integer number;
 
-    @NotBlank
+    @NotNull
     @Column(name = "city_code")
-    private String cityCode;
+    private Integer cityCode;
 
-    @NotBlank
+    @NotNull
     @Column(name = "country_code")
-    private String countryCode;
+    private Integer countryCode;
 
     @ManyToOne
     @JoinColumn(name="usuario_id", nullable=false)
