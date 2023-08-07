@@ -1,9 +1,9 @@
 package com.banco.apiusuarios.util;
 
 import com.banco.apiusuarios.dto.UsuarioCreationDto;
-import com.banco.apiusuarios.excepciones.DuplicateEmailException;
-import com.banco.apiusuarios.excepciones.InvalidEmailFormat;
-import com.banco.apiusuarios.excepciones.InvalidPasswordFormat;
+import com.banco.apiusuarios.excepciones.ExcepcionCorreoDuplicado;
+import com.banco.apiusuarios.excepciones.ExcepcionFormatoClaveInvalida;
+import com.banco.apiusuarios.excepciones.ExcepcionFormatoCorreoInvalido;
 import com.banco.apiusuarios.modelo.Usuario;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class UsuarioValidatorTest {
         UsuarioCreationDto dto = new UsuarioCreationDto();
         dto.setEmail("invalidEmail");
         dto.setPassword("aPssword01");
-        Exception exception = assertThrows(InvalidEmailFormat.class, () -> {
+        Exception exception = assertThrows(ExcepcionFormatoCorreoInvalido.class, () -> {
             usuarioValidator.validarCreationUsuarioDto(dto);
         });
         assertEquals("Correo electrónico inválido", exception.getMessage());
@@ -41,7 +41,7 @@ public class UsuarioValidatorTest {
         UsuarioCreationDto dto = new UsuarioCreationDto();
         dto.setEmail("test1@test.com");
         dto.setPassword("password");
-        Exception exception = assertThrows(InvalidPasswordFormat.class, () -> {
+        Exception exception = assertThrows(ExcepcionFormatoClaveInvalida.class, () -> {
             usuarioValidator.validarCreationUsuarioDto(dto);
         });
         assertEquals("La clave es inválida", exception.getMessage());
@@ -55,6 +55,6 @@ public class UsuarioValidatorTest {
                 .name("test")
                 .password("test123")
                 .build();
-        assertThrows(DuplicateEmailException.class, () -> usuarioValidator.validarCreationUsuarioDto(usuarioCreationDto, usuario));
+        assertThrows(ExcepcionCorreoDuplicado.class, () -> usuarioValidator.validarCreationUsuarioDto(usuarioCreationDto, usuario));
     }
 }

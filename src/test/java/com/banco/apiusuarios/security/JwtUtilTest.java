@@ -13,6 +13,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 public class JwtUtilTest {
 
@@ -27,7 +28,7 @@ public class JwtUtilTest {
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        openMocks(this);
         ReflectionTestUtils.setField(jwtUtil, "SECRET", secretKey);
         ReflectionTestUtils.setField(jwtUtil, "EXPIRATION_TIME", expirationTime);
     }

@@ -2,9 +2,9 @@ package com.banco.apiusuarios.util;
 
 import com.banco.apiusuarios.config.UsuarioValidatorPatronesConfig;
 import com.banco.apiusuarios.dto.UsuarioCreationDto;
-import com.banco.apiusuarios.excepciones.DuplicateEmailException;
-import com.banco.apiusuarios.excepciones.InvalidEmailFormat;
-import com.banco.apiusuarios.excepciones.InvalidPasswordFormat;
+import com.banco.apiusuarios.excepciones.ExcepcionCorreoDuplicado;
+import com.banco.apiusuarios.excepciones.ExcepcionFormatoCorreoInvalido;
+import com.banco.apiusuarios.excepciones.ExcepcionFormatoClaveInvalida;
 import com.banco.apiusuarios.modelo.Usuario;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -39,18 +39,18 @@ public class UsuarioValidator {
         log.info("Validando el formato del correo: {}", usuarioCreationDto.getEmail());
         Matcher emailMatcher = EMAIL_PATTERN.matcher(usuarioCreationDto.getEmail());
         if (!emailMatcher.matches()) {
-            throw new InvalidEmailFormat("Correo electrónico inválido");
+            throw new ExcepcionFormatoCorreoInvalido("Correo electrónico inválido");
         }
 
         log.info("Validando que el correo {} no esté registrado", usuarioCreationDto.getEmail());
         if (usuarioEnBD != null) {
-            throw new DuplicateEmailException("El correo ya está registrado");
+            throw new ExcepcionCorreoDuplicado("El correo ya está registrado");
         }
 
         log.info("Validando el formato de la contraseña");
         Matcher passwordMatcher = PASSWORD_PATTERN.matcher(usuarioCreationDto.getPassword());
         if (!passwordMatcher.matches()) {
-            throw new InvalidPasswordFormat("La clave es inválida");
+            throw new ExcepcionFormatoClaveInvalida("La clave es inválida");
         }
         return true;
     }

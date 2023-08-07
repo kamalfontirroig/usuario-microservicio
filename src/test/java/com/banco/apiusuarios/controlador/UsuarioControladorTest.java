@@ -2,7 +2,6 @@ package com.banco.apiusuarios.controlador;
 
 import com.banco.apiusuarios.dto.UsuarioCreationDto;
 import com.banco.apiusuarios.dto.UsuarioResponseDto;
-import com.banco.apiusuarios.excepciones.DuplicateEmailException;
 import com.banco.apiusuarios.servicio.UsuarioServicio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
