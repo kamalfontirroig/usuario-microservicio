@@ -35,7 +35,7 @@ Project Structure
 Application Properties
 ====================
 
-File: C:\Users\kfontirr\OneDrive - everis\Escritorio\microservicios-curso\usuario-microservicio - Intellij\build\resources\main\application.properties
+File: build\resources\main\application.properties
 server.port=8080
 spring.datasource.url=jdbc:h2:mem:testdb
 spring.datasource.driverClassName=org.h2.Driver
@@ -66,7 +66,7 @@ patron.password=^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d.*\\d).+$
 Gradle Build File
 ====================
 
-File: C:\Users\kfontirr\OneDrive - everis\Escritorio\microservicios-curso\usuario-microservicio - Intellij\build.gradle
+File: build.gradle
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.2'
@@ -118,7 +118,7 @@ tasks.named('test') {
 Application Properties
 ====================
 
-File: C:\Users\kfontirr\OneDrive - everis\Escritorio\microservicios-curso\usuario-microservicio - Intellij\src\main\resources\application.properties
+File: src\main\resources\application.properties
 server.port=8080
 spring.datasource.url=jdbc:h2:mem:testdb
 spring.datasource.driverClassName=org.h2.Driver
